@@ -27,6 +27,7 @@ npm run lint
 
 - Listagem paginada de Pokémon (nome + imagem), com scroll infinito
 - Busca por nome, com cache local (a PokeAPI não tem busca parcial por nome)
+- Filtro por tipo (chips), com aura/cor por tipo em toda a interface
 - Favoritar direto na lista ou na tela de detalhes, persistido em `localStorage`
 - Tela de detalhes com imagem, descrição, altura, peso, exp. base, tipos, habilidades e estatísticas base
 - Tela de Favoritos
