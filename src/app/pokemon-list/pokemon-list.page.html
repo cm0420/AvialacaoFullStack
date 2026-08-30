@@ -32,7 +32,7 @@
     <ion-row>
       @for (pokemon of displayedPokemons(); track pokemon.id) {
         <ion-col size="6" size-md="4" size-lg="3">
-          <ion-card class="pokemon-card">
+          <ion-card class="pokemon-card" (click)="openDetail(pokemon.id)" [button]="true">
             <button
               class="favorite-button"
               (click)="toggleFavorite(pokemon.id, $event)"
