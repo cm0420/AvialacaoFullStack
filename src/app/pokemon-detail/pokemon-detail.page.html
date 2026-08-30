@@ -19,7 +19,9 @@
   @if (full(); as data) {
     <div class="detail-layout">
       <div class="detail-image">
-        <img [src]="artworkUrl(data.detail)" [alt]="data.detail.name" />
+        <div class="pokemon-image-wrap">
+          <img [src]="artworkUrl(data.detail)" [alt]="data.detail.name" />
+        </div>
         <h1 class="pokemon-name">{{ data.detail.name }}</h1>
         <span class="pokemon-number">#{{ data.detail.id }}</span>
       </div>
@@ -27,7 +29,7 @@
       <div class="detail-info">
         <p class="flavor-text">{{ flavorText(data.species) }}</p>
 
-        <ion-list>
+        <ion-list [inset]="true">
           <ion-item>
             <ion-label>Altura</ion-label>
             <ion-note slot="end">{{ data.detail.height / 10 }} m</ion-note>

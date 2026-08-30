@@ -13,7 +13,9 @@
         @for (pokemon of pokemons(); track pokemon.id) {
           <ion-col class="pokemon-col">
             <ion-card class="pokemon-card" [button]="true" (click)="openDetail(pokemon.id)">
-              <img [src]="artworkUrl(pokemon)" [alt]="pokemon.name" loading="lazy" />
+              <div class="pokemon-image-wrap">
+                <img [src]="artworkUrl(pokemon)" [alt]="pokemon.name" loading="lazy" />
+              </div>
               <ion-card-content>
                 <span class="pokemon-name">{{ pokemon.name }}</span>
               </ion-card-content>

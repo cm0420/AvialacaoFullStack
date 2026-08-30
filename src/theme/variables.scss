@@ -1,2 +1,82 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// Paleta temática Pokédex — substitui as cores padrão do Ionic (azul)
+// pra combinar com o cabeçalho vermelho/lente/LEDs já usados no app.
+// Referência: https://ionicframework.com/docs/theming/color-generator
+
+:root {
+  /** primary — vermelho Pokédex **/
+  --ion-color-primary: #e3350d;
+  --ion-color-primary-rgb: 227, 53, 13;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #c82e0b;
+  --ion-color-primary-tint: #e64925;
+
+  /** secondary — azul da lente **/
+  --ion-color-secondary: #3b4cca;
+  --ion-color-secondary-rgb: 59, 76, 202;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #3443b2;
+  --ion-color-secondary-tint: #4f5ed0;
+
+  /** tertiary **/
+  --ion-color-tertiary: #3b4cca;
+  --ion-color-tertiary-rgb: 59, 76, 202;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #3443b2;
+  --ion-color-tertiary-tint: #4f5ed0;
+
+  /** success **/
+  --ion-color-success: #4caf50;
+  --ion-color-success-rgb: 76, 175, 80;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #439a46;
+  --ion-color-success-tint: #5eb762;
+
+  /** warning — amarelo Pokébola **/
+  --ion-color-warning: #ffcb05;
+  --ion-color-warning-rgb: 255, 203, 5;
+  --ion-color-warning-contrast: #2b2b2b;
+  --ion-color-warning-contrast-rgb: 43, 43, 43;
+  --ion-color-warning-shade: #e0b304;
+  --ion-color-warning-tint: #ffd11e;
+
+  /** danger **/
+  --ion-color-danger: #cc0000;
+  --ion-color-danger-rgb: 204, 0, 0;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #b40000;
+  --ion-color-danger-tint: #d21a1a;
+
+  /** dark **/
+  --ion-color-dark: #2b2b2b;
+  --ion-color-dark-rgb: 43, 43, 43;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #262626;
+  --ion-color-dark-tint: #404040;
+
+  /** medium **/
+  --ion-color-medium: #8a8a8a;
+  --ion-color-medium-rgb: 138, 138, 138;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #797979;
+  --ion-color-medium-tint: #969696;
+
+  /** light **/
+  --ion-color-light: #f7f2ea;
+  --ion-color-light-rgb: 247, 242, 234;
+  --ion-color-light-contrast: #2b2b2b;
+  --ion-color-light-contrast-rgb: 43, 43, 43;
+  --ion-color-light-shade: #dad5ce;
+  --ion-color-light-tint: #f8f4ed;
+
+  /** fundo geral levemente creme, lembrando o corpo da Pokédex **/
+  --ion-background-color: #faf6ef;
+  --ion-background-color-rgb: 250, 246, 239;
+  --ion-toolbar-background: #ffffff;
+}
