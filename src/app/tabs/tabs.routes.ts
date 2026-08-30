@@ -12,9 +12,9 @@ export const routes: Routes = [
           import('../pokemon-list/pokemon-list.page').then((m) => m.PokemonListPage),
       },
       {
-        path: 'tab2',
+        path: 'favorites',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('../favorites/favorites.page').then((m) => m.FavoritesPage),
       },
       {
         path: '',

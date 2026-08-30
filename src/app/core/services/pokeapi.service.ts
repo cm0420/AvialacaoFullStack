@@ -53,6 +53,14 @@ export class PokeApiService {
     );
   }
 
+  getArtworkUrl(detail: PokemonDetail): string {
+    return (
+      detail.sprites.other?.['official-artwork']?.front_default ??
+      detail.sprites.front_default ??
+      ''
+    );
+  }
+
   toCard(item: PokemonListItem): PokemonCard {
     const id = this.extractIdFromUrl(item.url);
     return {
@@ -79,3 +87,4 @@ export class PokeApiService {
     return this.allPokemonCache$;
   }
 }
+

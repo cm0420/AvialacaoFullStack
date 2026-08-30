@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Favoritos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (pokemons().length === 0) {
+    <p class="empty-state">Você ainda não favoritou nenhum Pokémon.</p>
+  } @else {
+    <ion-grid>
+      <ion-row>
+        @for (pokemon of pokemons(); track pokemon.id) {
+          <ion-col size="6" size-md="4" size-lg="3">
+            <ion-card class="pokemon-card" [button]="true" (click)="openDetail(pokemon.id)">
+              <img [src]="artworkUrl(pokemon)" [alt]="pokemon.name" loading="lazy" />
+              <ion-card-content>
+                <span class="pokemon-name">{{ pokemon.name }}</span>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  }
+</ion-content>

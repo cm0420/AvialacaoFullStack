@@ -80,11 +80,7 @@ export class PokemonDetailPage {
   }
 
   artworkUrl(detail: PokemonDetail): string {
-    return (
-      detail.sprites.other?.['official-artwork']?.front_default ??
-      detail.sprites.front_default ??
-      ''
-    );
+    return this.pokeApiService.getArtworkUrl(detail);
   }
 
   flavorText(species: PokemonSpecies): string {
