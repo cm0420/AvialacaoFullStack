@@ -1,31 +1,43 @@
-// Paleta temática Pokédex — substitui as cores padrão do Ionic (azul)
-// pra combinar com o cabeçalho vermelho/lente/LEDs já usados no app.
-// Referência: https://ionicframework.com/docs/theming/color-generator
+// Design system do redesign "Pokédex em modo escuro" — tokens extraídos do
+// mockup de referência (Claude Design). Ver docs/ARQUITETURA.md.
 
 :root {
+  /** tokens do design system **/
+  --pk-bg: #0a0a0c;
+  --pk-surface: #101014;
+  --pk-surface-2: #17171c;
+  --pk-border: #26262d;
+  --pk-divider: #1c1c22;
+  --pk-text: #e8e6e3;
+  --pk-text-muted: #a3a09c;
+  --pk-text-faint: #6f6c68;
+  --pk-red: #e3350d;
+  --pk-yellow: #ffcb05;
+  --pk-orange-link: #ff6b4a;
+
   /** primary — vermelho Pokédex **/
-  --ion-color-primary: #e3350d;
+  --ion-color-primary: var(--pk-red);
   --ion-color-primary-rgb: 227, 53, 13;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #c82e0b;
   --ion-color-primary-tint: #e64925;
 
-  /** secondary — azul da lente **/
-  --ion-color-secondary: #3b4cca;
-  --ion-color-secondary-rgb: 59, 76, 202;
+  /** secondary — laranja de destaque **/
+  --ion-color-secondary: var(--pk-orange-link);
+  --ion-color-secondary-rgb: 255, 107, 74;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #3443b2;
-  --ion-color-secondary-tint: #4f5ed0;
+  --ion-color-secondary-shade: #e05e40;
+  --ion-color-secondary-tint: #ff7a5c;
 
   /** tertiary **/
-  --ion-color-tertiary: #3b4cca;
-  --ion-color-tertiary-rgb: 59, 76, 202;
+  --ion-color-tertiary: var(--pk-orange-link);
+  --ion-color-tertiary-rgb: 255, 107, 74;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #3443b2;
-  --ion-color-tertiary-tint: #4f5ed0;
+  --ion-color-tertiary-shade: #e05e40;
+  --ion-color-tertiary-tint: #ff7a5c;
 
   /** success **/
   --ion-color-success: #4caf50;
@@ -35,8 +47,8 @@
   --ion-color-success-shade: #439a46;
   --ion-color-success-tint: #5eb762;
 
-  /** warning — amarelo Pokébola **/
-  --ion-color-warning: #ffcb05;
+  /** warning — amarelo Pokébola (favorito ativo) **/
+  --ion-color-warning: var(--pk-yellow);
   --ion-color-warning-rgb: 255, 203, 5;
   --ion-color-warning-contrast: #2b2b2b;
   --ion-color-warning-contrast-rgb: 43, 43, 43;
@@ -44,39 +56,45 @@
   --ion-color-warning-tint: #ffd11e;
 
   /** danger **/
-  --ion-color-danger: #cc0000;
-  --ion-color-danger-rgb: 204, 0, 0;
+  --ion-color-danger: #d24444;
+  --ion-color-danger-rgb: 210, 68, 68;
   --ion-color-danger-contrast: #ffffff;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #b40000;
-  --ion-color-danger-tint: #d21a1a;
+  --ion-color-danger-shade: #b93c3c;
+  --ion-color-danger-tint: #d75757;
 
   /** dark **/
-  --ion-color-dark: #2b2b2b;
-  --ion-color-dark-rgb: 43, 43, 43;
-  --ion-color-dark-contrast: #ffffff;
-  --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #262626;
-  --ion-color-dark-tint: #404040;
+  --ion-color-dark: var(--pk-text);
+  --ion-color-dark-rgb: 232, 230, 227;
+  --ion-color-dark-contrast: #0a0a0c;
+  --ion-color-dark-contrast-rgb: 10, 10, 12;
+  --ion-color-dark-shade: #cbc9c6;
+  --ion-color-dark-tint: #e9e7e4;
 
   /** medium **/
-  --ion-color-medium: #8a8a8a;
-  --ion-color-medium-rgb: 138, 138, 138;
-  --ion-color-medium-contrast: #ffffff;
-  --ion-color-medium-contrast-rgb: 255, 255, 255;
-  --ion-color-medium-shade: #797979;
-  --ion-color-medium-tint: #969696;
+  --ion-color-medium: var(--pk-text-muted);
+  --ion-color-medium-rgb: 163, 160, 156;
+  --ion-color-medium-contrast: #0a0a0c;
+  --ion-color-medium-contrast-rgb: 10, 10, 12;
+  --ion-color-medium-shade: #8f8d89;
+  --ion-color-medium-tint: #aca9a6;
 
-  /** light **/
-  --ion-color-light: #f7f2ea;
-  --ion-color-light-rgb: 247, 242, 234;
-  --ion-color-light-contrast: #2b2b2b;
-  --ion-color-light-contrast-rgb: 43, 43, 43;
-  --ion-color-light-shade: #dad5ce;
-  --ion-color-light-tint: #f8f4ed;
+  /** light — superfícies escuras (cards, chips neutros) **/
+  --ion-color-light: var(--pk-surface-2);
+  --ion-color-light-rgb: 23, 23, 28;
+  --ion-color-light-contrast: var(--pk-text);
+  --ion-color-light-contrast-rgb: 232, 230, 227;
+  --ion-color-light-shade: #141419;
+  --ion-color-light-tint: #232329;
 
-  /** fundo geral levemente creme, lembrando o corpo da Pokédex **/
-  --ion-background-color: #faf6ef;
-  --ion-background-color-rgb: 250, 246, 239;
-  --ion-toolbar-background: #ffffff;
+  /** fundo geral e superfícies **/
+  --ion-background-color: var(--pk-bg);
+  --ion-background-color-rgb: 10, 10, 12;
+  --ion-text-color: var(--pk-text);
+  --ion-text-color-rgb: 232, 230, 227;
+  --ion-toolbar-background: var(--pk-bg);
+  --ion-toolbar-color: var(--pk-text);
+  --ion-item-background: var(--pk-surface);
+  --ion-border-color: var(--pk-border);
+  --ion-card-background: var(--pk-surface-2);
 }
