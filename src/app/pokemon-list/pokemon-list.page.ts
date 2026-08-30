@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -55,6 +56,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 export class PokemonListPage implements OnInit {
   private pokeApiService = inject(PokeApiService);
   private favoritesService = inject(FavoritesService);
+  private router = inject(Router);
 
   pokemons = signal<PokemonCard[]>([]);
   favoriteIds = toSignal(this.favoritesService.favorites$, {
@@ -124,5 +126,9 @@ export class PokemonListPage implements OnInit {
   toggleFavorite(id: number, event: Event): void {
     event.stopPropagation();
     this.favoritesService.toggle(id);
+  }
+
+  openDetail(id: number): void {
+    this.router.navigate(['/pokemons', id]);
   }
 }

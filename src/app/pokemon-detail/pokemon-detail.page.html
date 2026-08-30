@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/pokemons"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ full()?.detail?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="toggleFavorite()"
+        [attr.aria-label]="isFavorite() ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+      >
+        <ion-icon slot="icon-only" [name]="isFavorite() ? 'star' : 'star-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (full(); as data) {
+    <div class="detail-layout">
+      <div class="detail-image">
+        <img [src]="artworkUrl(data.detail)" [alt]="data.detail.name" />
+        <h1 class="pokemon-name">{{ data.detail.name }}</h1>
+        <span class="pokemon-number">#{{ data.detail.id }}</span>
+      </div>
+
+      <div class="detail-info">
+        <p class="flavor-text">{{ flavorText(data.species) }}</p>
+
+        <ion-list>
+          <ion-item>
+            <ion-label>Altura</ion-label>
+            <ion-note slot="end">{{ data.detail.height / 10 }} m</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>Peso</ion-label>
+            <ion-note slot="end">{{ data.detail.weight / 10 }} kg</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>Exp. base</ion-label>
+            <ion-note slot="end">{{ data.detail.base_experience }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>Tipos</ion-label>
+            <ion-note slot="end">{{ typesLabel(data.detail) }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label>Habilidades</ion-label>
+            <ion-note slot="end">{{ abilitiesLabel(data.detail) }}</ion-note>
+          </ion-item>
+          @for (stat of data.detail.stats; track stat.stat.name) {
+            <ion-item>
+              <ion-label>{{ statLabel(stat.stat.name) }}</ion-label>
+              <ion-note slot="end">{{ stat.base_stat }}</ion-note>
+            </ion-item>
+          }
+        </ion-list>
+      </div>
+    </div>
+  } @else {
+    <div class="detail-loading">
+      <ion-spinner></ion-spinner>
+    </div>
+  }
+</ion-content>
