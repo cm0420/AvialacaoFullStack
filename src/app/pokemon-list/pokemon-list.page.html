@@ -14,7 +14,6 @@
 
     <div class="pk-title-row">
       <h1 class="pk-title">Pokédex</h1>
-      <span class="pk-mono pk-kanto">TODOS</span>
     </div>
 
     <ion-searchbar
@@ -62,7 +61,7 @@
         <img [src]="pokemon.imageUrl" [alt]="pokemon.name" loading="lazy" />
         <span class="pk-card-name">{{ pokemon.name }}</span>
         <div class="pk-card-types">
-          @for (t of pokemon.types; track t) {
+          @for (t of pokemon.types; track $index) {
             <span class="pk-mono pk-type-tag" [style.color]="chipAccent(t)">{{ typeLabel(t) }}</span>
           }
         </div>

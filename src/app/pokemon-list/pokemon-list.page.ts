@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Subject, of } from 'rxjs';
@@ -40,6 +40,8 @@ export class PokemonListPage implements OnInit {
   private pokeApiService = inject(PokeApiService);
   private favoritesService = inject(FavoritesService);
   private router = inject(Router);
+
+  @ViewChild(IonContent) private content?: IonContent;
 
   pokemons = signal<PokemonCard[]>([]);
   totalCount = signal<number | null>(null);
@@ -100,11 +102,36 @@ export class PokemonListPage implements OnInit {
       if (event && !this.hasMore) {
         event.target.disabled = true;
       }
+
+      if (!event) {
+        this.loadMoreIfNotScrollable();
+      }
     });
 
     if (this.totalCount() === null) {
       this.pokeApiService.getPokemonList(0, 1).subscribe((res) => this.totalCount.set(res.count));
     }
+  }
+
+  /**
+   * Em telas largas e curtas (notebook), 1 página pode não ser alta o
+   * suficiente pra criar scroll — sem scroll, o ion-infinite-scroll nunca
+   * dispara. Continua carregando páginas até o conteúdo precisar de scroll
+   * ou a API acabar.
+   */
+  private loadMoreIfNotScrollable(): void {
+    if (!this.hasMore) {
+      return;
+    }
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.content?.getScrollElement().then((el) => {
+          if (el.scrollHeight <= el.clientHeight + 2) {
+            this.loadMore();
+          }
+        });
+      });
+    });
   }
 
   onSearchInput(event: SearchbarCustomEvent): void {
