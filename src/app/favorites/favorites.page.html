@@ -1,28 +1,47 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Favoritos</ion-title>
-  </ion-toolbar>
+  <div class="pk-header-compact">
+    <div class="pk-registro-row">
+      <span class="pk-dot"></span>
+      <h1 class="pk-title">Favoritos</h1>
+    </div>
+    <span class="pk-mono pk-counter">{{ pokemons().length }} REGISTRO{{ pokemons().length === 1 ? '' : 'S' }}</span>
+  </div>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   @if (pokemons().length === 0) {
     <p class="empty-state">Você ainda não favoritou nenhum Pokémon.</p>
   } @else {
-    <ion-grid>
-      <ion-row>
-        @for (pokemon of pokemons(); track pokemon.id) {
-          <ion-col class="pokemon-col">
-            <ion-card class="pokemon-card" [button]="true" (click)="openDetail(pokemon.id)">
-              <div class="pokemon-image-wrap">
-                <img [src]="artworkUrl(pokemon)" [alt]="pokemon.name" loading="lazy" />
-              </div>
-              <ion-card-content>
-                <span class="pokemon-name">{{ pokemon.name }}</span>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        }
-      </ion-row>
-    </ion-grid>
+    <div class="pk-rows">
+      @for (pokemon of pokemons(); track pokemon.id) {
+        <div
+          class="pk-row"
+          [style.border-left-color]="typeAccent(typesList(pokemon)[0])"
+          (click)="openDetail(pokemon.id)"
+        >
+          <div class="pk-row-thumb">
+            <img [src]="artworkUrl(pokemon)" [alt]="pokemon.name" loading="lazy" />
+          </div>
+          <div class="pk-row-info">
+            <span class="pk-row-name">
+              {{ pokemon.name }}
+              <span class="pk-mono pk-row-number">#{{ formatNumber(pokemon.id) }}</span>
+            </span>
+            <span class="pk-row-types pk-mono">
+              @for (t of typesList(pokemon); track t) {
+                <span [style.color]="typeAccent(t)">{{ typeLabel(t) }}</span>
+              }
+            </span>
+          </div>
+          <button
+            class="pk-row-star"
+            (click)="removeFavorite(pokemon.id, $event)"
+            aria-label="Remover dos favoritos"
+          >
+            <ion-icon name="star"></ion-icon>
+          </button>
+        </div>
+      }
+    </div>
   }
 </ion-content>

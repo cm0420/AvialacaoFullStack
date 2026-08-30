@@ -24,4 +24,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 17 | Design tokens do redesign (cores, fontes, mapa por tipo) | [#17](https://github.com/cm0420/AvialacaoFullStack/pull/17) |
 | 18 | Models + PokeApiService com suporte a tipo (listagem enriquecida, filtro por tipo) | [#18](https://github.com/cm0420/AvialacaoFullStack/pull/18) |
 | 19 | Reconstrução da tela Pokémons (design 1a: grid escuro, chips de tipo, aura) | [#19](https://github.com/cm0420/AvialacaoFullStack/pull/19) |
-| 20 | Reconstrução da tela de Detalhes (design 1c: aura pulsante, badges, barras de stat) | _em andamento_ |
+| 20 | Reconstrução da tela de Detalhes (design 1c: aura pulsante, badges, barras de stat) | [#20](https://github.com/cm0420/AvialacaoFullStack/pull/20) |
+| 21 | Reconstrução da tela de Favoritos (design 1b: fichas em linha) | _em andamento_ |
