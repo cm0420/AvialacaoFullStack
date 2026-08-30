@@ -90,7 +90,7 @@ quanto no detalhe. Os três serviços centrais têm testes unitários cobrindo o
 principal e casos de erro. O histórico de commits foi mantido pequeno e sequencial, cada um
 isolado e testável, com um Pull Request correspondente no GitHub para cada entrega.
 
-## Prints
+## Prints e vídeo
 
 | Listagem | Filtro por tipo (Normal) | Filtro por tipo (Fantasma) |
 |---|---|---|
@@ -99,3 +99,9 @@ isolado e testável, com um Pull Request correspondente no GitHub para cada entr
 | Favoritos | Detalhes |
 |---|---|
 | ![Tela de Favoritos](docs/screenshots/favoritos.png) | ![Tela de Detalhes](docs/screenshots/detalhes.png) |
+
+Vídeo curto mostrando o app rodando (listagem, busca, filtro por tipo, favoritar, detalhes):
+
+<video src="docs/screenshots/demo.mp4" controls width="360">
+  Seu navegador não exibe vídeo embutido — baixe/abra <a href="docs/screenshots/demo.mp4">docs/screenshots/demo.mp4</a> diretamente.
+</video>

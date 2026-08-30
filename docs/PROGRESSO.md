@@ -30,4 +30,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 23 | Ajustes de grid (cards maiores, preencher tela larga, remover label "Todos", corrigir warning NG0956) | [#23](https://github.com/cm0420/AvialacaoFullStack/pull/23) |
 | 24 | Título da aba do navegador | [#24](https://github.com/cm0420/AvialacaoFullStack/pull/24) |
 | 25 | README: explicação de uso/arquitetura + screenshots | [#25](https://github.com/cm0420/AvialacaoFullStack/pull/25) |
-| 26 | Spinner de carregamento (inicial, busca, filtro por tipo) | _em andamento_ |
+| 26 | Spinner de carregamento (inicial, busca, filtro por tipo) | [#26](https://github.com/cm0420/AvialacaoFullStack/pull/26) |
+| 27 | Vídeo de demonstração no README | _em andamento_ |
