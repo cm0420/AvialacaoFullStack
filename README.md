@@ -34,6 +34,39 @@ npm run lint
 - Layout adaptado à orientação do dispositivo (retrato/paisagem)
 - Notificação via webhook (webhook.site) sempre que um Pokémon é favoritado/desfavoritado
 
+## Como funciona
+
+Ao abrir o app, a aba **Pokémons** já mostra nome e imagem de cada Pokémon num grid, carregado aos
+poucos conforme você rola a tela. Dá pra buscar por nome na barra de busca ou filtrar por tipo
+pelos chips logo abaixo — cada tipo tem sua própria cor, que também aparece como um brilho sutil
+atrás da imagem nos cards e na tela de detalhes.
+
+Tocar num card leva pra tela de **Detalhes**: imagem, descrição, altura, peso, experiência base,
+tipos, habilidades e as 6 estatísticas base. A estrela favorita o Pokémon direto na lista ou no
+detalhe; favoritos ficam salvos no aparelho e aparecem na aba **Favoritos**. Cada vez que você
+favorita ou desfavorita, o app também dispara uma notificação assíncrona pra um serviço externo
+(webhook.site), simulando uma integração com outro sistema — isso nunca trava o favoritar local se
+falhar. O layout se adapta à orientação do aparelho (retrato/paisagem) tanto na lista quanto no
+detalhe.
+
+## Como foi feito
+
+O projeto foi construído de forma incremental: cada parte (modelos, serviços, cada tela, busca,
+filtro por tipo, webhook, responsividade, testes) virou um commit isolado e testável, com Pull
+Request próprio no GitHub — o histórico completo está documentado em
+[`docs/PROGRESSO.md`](docs/PROGRESSO.md).
+
+A arquitetura usa injeção de dependência: um único serviço (`PokeApiService`) concentra todo
+acesso HTTP à PokeAPI, então nenhuma tela conversa direto com a API. `FavoritesService` mantém o
+estado dos favoritos de forma reativa (`Observable`) e persiste em `localStorage`; `WebhookService`
+cuida só da notificação externa, sem que as telas precisem saber que ele existe.
+
+O visual partiu de uma referência de design (tema escuro, identidade visual por tipo de Pokémon,
+tipografia Archivo + IBM Plex Mono) implementada tela por tela — grid da listagem, ficha de
+detalhes com aura e barras de estatística, e a lista de favoritos em formato de fichas. Testes
+unitários cobrem os três serviços centrais (`PokeApiService`, `FavoritesService`,
+`WebhookService`).
+
 ## Stack
 
 Ionic 8 + Angular 22 (standalone components, zoneless), RxJS, Vitest para testes unitários.
@@ -57,6 +90,12 @@ quanto no detalhe. Os três serviços centrais têm testes unitários cobrindo o
 principal e casos de erro. O histórico de commits foi mantido pequeno e sequencial, cada um
 isolado e testável, com um Pull Request correspondente no GitHub para cada entrega.
 
-## Prints / demonstração
+## Prints
 
-_(a completar com screenshots ou um gif do app rodando)_
+| Listagem | Filtro por tipo (Normal) | Filtro por tipo (Fantasma) |
+|---|---|---|
+| ![Listagem de Pokémon](docs/screenshots/lista.png) | ![Filtro por tipo Normal](docs/screenshots/lista-filtro-normal.png) | ![Filtro por tipo Fantasma](docs/screenshots/lista-filtro-fantasma.png) |
+
+| Favoritos | Detalhes |
+|---|---|
+| ![Tela de Favoritos](docs/screenshots/favoritos.png) | ![Tela de Detalhes](docs/screenshots/detalhes.png) |
