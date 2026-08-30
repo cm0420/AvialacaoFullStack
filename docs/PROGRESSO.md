@@ -28,4 +28,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 21 | Reconstrução da tela de Favoritos (design 1b: fichas em linha) | [#21](https://github.com/cm0420/AvialacaoFullStack/pull/21) |
 | 22 | Documentação atualizada pro redesign | [#22](https://github.com/cm0420/AvialacaoFullStack/pull/22) |
 | 23 | Ajustes de grid (cards maiores, preencher tela larga, remover label "Todos", corrigir warning NG0956) | [#23](https://github.com/cm0420/AvialacaoFullStack/pull/23) |
-| 24 | Título da aba do navegador | _em andamento_ |
+| 24 | Título da aba do navegador | [#24](https://github.com/cm0420/AvialacaoFullStack/pull/24) |
+| 25 | README: explicação de uso/arquitetura + screenshots | _em andamento_ |
