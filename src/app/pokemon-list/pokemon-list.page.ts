@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   IonHeader,
   IonToolbar,
@@ -9,11 +10,15 @@ import {
   IonCol,
   IonCard,
   IonCardContent,
+  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   InfiniteScrollCustomEvent,
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { star, starOutline } from 'ionicons/icons';
 import { PokeApiService } from '../core/services/pokeapi.service';
+import { FavoritesService } from '../core/services/favorites.service';
 import { PokemonCard } from '../core/models/pokemon.model';
 
 const PAGE_SIZE = 20;
@@ -32,16 +37,26 @@ const PAGE_SIZE = 20;
     IonCol,
     IonCard,
     IonCardContent,
+    IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
   ],
 })
 export class PokemonListPage implements OnInit {
   private pokeApiService = inject(PokeApiService);
+  private favoritesService = inject(FavoritesService);
 
   pokemons = signal<PokemonCard[]>([]);
+  favoriteIds = toSignal(this.favoritesService.favorites$, {
+    initialValue: this.favoritesService.getAll(),
+  });
+
   private offset = 0;
   private hasMore = true;
+
+  constructor() {
+    addIcons({ star, 'star-outline': starOutline });
+  }
 
   ngOnInit(): void {
     this.loadMore();
@@ -59,5 +74,14 @@ export class PokemonListPage implements OnInit {
         event.target.disabled = true;
       }
     });
+  }
+
+  isFavorite(id: number): boolean {
+    return this.favoriteIds().includes(id);
+  }
+
+  toggleFavorite(id: number, event: Event): void {
+    event.stopPropagation();
+    this.favoritesService.toggle(id);
   }
 }
