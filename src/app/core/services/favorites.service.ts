@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { WebhookService } from './webhook.service';
 
 const STORAGE_KEY = 'pokedex:favorites';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
+  private webhookService = inject(WebhookService);
+
   private favoritesSubject = new BehaviorSubject<number[]>(this.loadFromStorage());
 
   favorites$ = this.favoritesSubject.asObservable();
@@ -19,12 +22,12 @@ export class FavoritesService {
 
   toggle(id: number): void {
     const current = this.favoritesSubject.value;
-    const next = current.includes(id)
-      ? current.filter((favoriteId) => favoriteId !== id)
-      : [...current, id];
+    const willBeFavorite = !current.includes(id);
+    const next = willBeFavorite ? [...current, id] : current.filter((favoriteId) => favoriteId !== id);
 
     this.favoritesSubject.next(next);
     this.saveToStorage(next);
+    this.webhookService.notifyFavoriteToggled(id, willBeFavorite);
   }
 
   private loadFromStorage(): number[] {
