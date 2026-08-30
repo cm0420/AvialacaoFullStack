@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild, computed, inject, signal } from '@angular
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import {
   IonHeader,
   IonContent,
   IonSearchbar,
   IonIcon,
+  IonSpinner,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   InfiniteScrollCustomEvent,
@@ -32,6 +33,7 @@ const SEARCH_DEBOUNCE_MS = 300;
     IonContent,
     IonSearchbar,
     IonIcon,
+    IonSpinner,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
   ],
@@ -45,6 +47,9 @@ export class PokemonListPage implements OnInit {
 
   pokemons = signal<PokemonCard[]>([]);
   totalCount = signal<number | null>(null);
+  initialLoading = signal(true);
+  searchLoading = signal(false);
+  filterLoading = signal(false);
 
   favoriteIds = toSignal(this.favoritesService.favorites$, {
     initialValue: this.favoritesService.getAll(),
@@ -59,7 +64,10 @@ export class PokemonListPage implements OnInit {
     this.searchTerm$.pipe(
       debounceTime(SEARCH_DEBOUNCE_MS),
       distinctUntilChanged(),
-      switchMap((term) => this.pokeApiService.searchPokemonByName(term))
+      tap((term) => this.searchLoading.set(term.trim().length > 0)),
+      switchMap((term) =>
+        this.pokeApiService.searchPokemonByName(term).pipe(tap(() => this.searchLoading.set(false)))
+      )
     ),
     { initialValue: [] as PokemonCard[] }
   );
@@ -68,13 +76,24 @@ export class PokemonListPage implements OnInit {
   private selectedType$ = new Subject<string | null>();
   typeFilterResults = toSignal(
     this.selectedType$.pipe(
-      switchMap((type) => (type ? this.pokeApiService.getPokemonsByType(type) : of([])))
+      tap((type) => this.filterLoading.set(!!type)),
+      switchMap((type) =>
+        type
+          ? this.pokeApiService.getPokemonsByType(type).pipe(tap(() => this.filterLoading.set(false)))
+          : of([])
+      )
     ),
     { initialValue: [] as PokemonCard[] }
   );
 
   isSearching = computed(() => this.searchTerm().trim().length > 0);
   isFiltering = computed(() => this.selectedType() !== null);
+  isBusy = computed(
+    () =>
+      this.initialLoading() ||
+      (this.isSearching() && this.searchLoading()) ||
+      (this.isFiltering() && this.filterLoading())
+  );
   displayedPokemons = computed(() => {
     if (this.isSearching()) return this.searchResults();
     if (this.isFiltering()) return this.typeFilterResults();
@@ -97,6 +116,7 @@ export class PokemonListPage implements OnInit {
       this.pokemons.update((current) => [...current, ...page.cards]);
       this.offset += PAGE_SIZE;
       this.hasMore = !!page.next;
+      this.initialLoading.set(false);
 
       event?.target.complete();
       if (event && !this.hasMore) {
