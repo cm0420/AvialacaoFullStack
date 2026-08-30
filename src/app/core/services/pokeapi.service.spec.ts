@@ -3,7 +3,24 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { PokeApiService } from './pokeapi.service';
-import { PokemonListResponse } from '../models/pokemon.model';
+import { PokemonDetail, PokemonListResponse } from '../models/pokemon.model';
+
+function makeDetail(id: number, name: string, types: string[]): PokemonDetail {
+  return {
+    id,
+    name,
+    height: 7,
+    weight: 69,
+    base_experience: 64,
+    sprites: { front_default: null },
+    types: types.map((typeName, index) => ({
+      slot: index + 1,
+      type: { name: typeName, url: `https://pokeapi.co/api/v2/type/${typeName}/` },
+    })),
+    abilities: [],
+    stats: [],
+  };
+}
 
 describe('PokeApiService', () => {
   let service: PokeApiService;
@@ -59,14 +76,73 @@ describe('PokeApiService', () => {
     });
   });
 
-  it('toCard extracts the id from the URL and builds the sprite URL', () => {
-    const card = service.toCard({ name: 'charizard', url: 'https://pokeapi.co/api/v2/pokemon/6/' });
+  it('getPokemonListWithTypes enriches each result with its type via one request per item', () => {
+    const response: PokemonListResponse = {
+      count: 2,
+      next: 'https://pokeapi.co/api/v2/pokemon?offset=2&limit=2',
+      previous: null,
+      results: [
+        { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
+        { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' },
+      ],
+    };
 
-    expect(card).toEqual({
-      id: 6,
-      name: 'charizard',
-      imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png',
+    let result: unknown;
+    service.getPokemonListWithTypes(0, 2).subscribe((page) => (result = page));
+
+    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon?offset=0&limit=2').flush(response);
+    httpMock
+      .expectOne('https://pokeapi.co/api/v2/pokemon/1')
+      .flush(makeDetail(1, 'bulbasaur', ['grass', 'poison']));
+    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon/4').flush(makeDetail(4, 'charmander', ['fire']));
+
+    expect(result).toEqual({
+      next: response.next,
+      cards: [
+        {
+          id: 1,
+          name: 'bulbasaur',
+          imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+          types: ['grass', 'poison'],
+        },
+        {
+          id: 4,
+          name: 'charmander',
+          imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
+          types: ['fire'],
+        },
+      ],
     });
+  });
+
+  it('getAllTypes fetches once and caches for subsequent calls', () => {
+    service.getAllTypes().subscribe();
+    httpMock
+      .expectOne('https://pokeapi.co/api/v2/type')
+      .flush({ results: [{ name: 'fire', url: 'x' }] });
+
+    service.getAllTypes().subscribe();
+    httpMock.expectNone('https://pokeapi.co/api/v2/type');
+  });
+
+  it('getPokemonsByType maps the type endpoint response into cards tagged with that type', () => {
+    let result: unknown;
+    service.getPokemonsByType('fire').subscribe((cards) => (result = cards));
+
+    httpMock.expectOne('https://pokeapi.co/api/v2/type/fire').flush({
+      pokemon: [
+        { pokemon: { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' }, slot: 1 },
+      ],
+    });
+
+    expect(result).toEqual([
+      {
+        id: 4,
+        name: 'charmander',
+        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
+        types: ['fire'],
+      },
+    ]);
   });
 
   it('searchPokemonByName returns an empty array without an HTTP call for a blank term', () => {
@@ -76,45 +152,35 @@ describe('PokeApiService', () => {
     expect(result).toEqual([]);
   });
 
-  it('searchPokemonByName fetches and caches the full list, filtering locally', () => {
+  it('searchPokemonByName fetches the full list once, filters locally, then enriches matches with types', () => {
     const response: PokemonListResponse = {
-      count: 3,
+      count: 2,
       next: null,
       previous: null,
       results: [
         { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' },
-        { name: 'charmeleon', url: 'https://pokeapi.co/api/v2/pokemon/5/' },
         { name: 'squirtle', url: 'https://pokeapi.co/api/v2/pokemon/7/' },
       ],
     };
 
-    let firstResult: unknown;
-    service.searchPokemonByName('char').subscribe((results) => (firstResult = results));
-    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon?limit=2000').flush(response);
+    let result: unknown;
+    service.searchPokemonByName('char').subscribe((results) => (result = results));
 
-    expect(firstResult).toEqual([
+    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon?limit=2000').flush(response);
+    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon/4').flush(makeDetail(4, 'charmander', ['fire']));
+
+    expect(result).toEqual([
       {
         id: 4,
         name: 'charmander',
         imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
-      },
-      {
-        id: 5,
-        name: 'charmeleon',
-        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png',
+        types: ['fire'],
       },
     ]);
 
-    let secondResult: unknown;
-    service.searchPokemonByName('squirtle').subscribe((results) => (secondResult = results));
+    // segunda busca reaproveita o cache da lista completa (sem novo GET ?limit=2000)
+    service.searchPokemonByName('squirtle').subscribe();
     httpMock.expectNone('https://pokeapi.co/api/v2/pokemon?limit=2000');
-
-    expect(secondResult).toEqual([
-      {
-        id: 7,
-        name: 'squirtle',
-        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png',
-      },
-    ]);
+    httpMock.expectOne('https://pokeapi.co/api/v2/pokemon/7').flush(makeDetail(7, 'squirtle', ['water']));
   });
 });
