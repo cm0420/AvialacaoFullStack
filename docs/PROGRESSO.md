@@ -17,4 +17,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 10 | Tela de detalhes (`pokemon-detail`) | [#10](https://github.com/cm0420/AvialacaoFullStack/pull/10) |
 | 11 | Tela de Favoritos (renomeada de `tab2`) | [#11](https://github.com/cm0420/AvialacaoFullStack/pull/11) |
 | 12 | `WebhookService` + integração no favoritar | [#12](https://github.com/cm0420/AvialacaoFullStack/pull/12) |
-| 13 | Responsividade / orientação (grid + detail) | _em andamento_ |
+| 13 | Responsividade / orientação (grid + detail) | [#13](https://github.com/cm0420/AvialacaoFullStack/pull/13) |
+| 14 | Testes unitários (PokeApiService, FavoritesService, WebhookService) | _em andamento_ |
