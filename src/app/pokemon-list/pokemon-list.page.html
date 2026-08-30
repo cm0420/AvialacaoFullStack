@@ -1,13 +1,27 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Pokémons</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+  @if (showSearch()) {
+    <ion-toolbar>
+      <ion-searchbar
+        placeholder="Buscar por nome"
+        debounce="0"
+        (ionInput)="onSearchInput($event)"
+      ></ion-searchbar>
+    </ion-toolbar>
+  }
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
-      @for (pokemon of pokemons(); track pokemon.id) {
+      @for (pokemon of displayedPokemons(); track pokemon.id) {
         <ion-col size="6" size-md="4" size-lg="3">
           <ion-card class="pokemon-card">
             <button
@@ -27,7 +41,13 @@
     </ion-row>
   </ion-grid>
 
-  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  @if (isSearching() && displayedPokemons().length === 0) {
+    <p class="empty-state">Nenhum Pokémon encontrado.</p>
+  }
+
+  @if (!isSearching()) {
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  }
 </ion-content>

@@ -1,9 +1,14 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  IonButtons,
+  IonButton,
+  IonSearchbar,
   IonContent,
   IonGrid,
   IonRow,
@@ -14,14 +19,16 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   InfiniteScrollCustomEvent,
+  SearchbarCustomEvent,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { star, starOutline } from 'ionicons/icons';
+import { star, starOutline, search } from 'ionicons/icons';
 import { PokeApiService } from '../core/services/pokeapi.service';
 import { FavoritesService } from '../core/services/favorites.service';
 import { PokemonCard } from '../core/models/pokemon.model';
 
 const PAGE_SIZE = 20;
+const SEARCH_DEBOUNCE_MS = 300;
 
 @Component({
   selector: 'app-pokemon-list',
@@ -31,6 +38,9 @@ const PAGE_SIZE = 20;
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonButtons,
+    IonButton,
+    IonSearchbar,
     IonContent,
     IonGrid,
     IonRow,
@@ -51,11 +61,28 @@ export class PokemonListPage implements OnInit {
     initialValue: this.favoritesService.getAll(),
   });
 
+  showSearch = signal(false);
+  searchTerm = signal('');
+  private searchTerm$ = new Subject<string>();
+  searchResults = toSignal(
+    this.searchTerm$.pipe(
+      debounceTime(SEARCH_DEBOUNCE_MS),
+      distinctUntilChanged(),
+      switchMap((term) => this.pokeApiService.searchPokemonByName(term))
+    ),
+    { initialValue: [] as PokemonCard[] }
+  );
+
+  isSearching = computed(() => this.searchTerm().trim().length > 0);
+  displayedPokemons = computed(() =>
+    this.isSearching() ? this.searchResults() : this.pokemons()
+  );
+
   private offset = 0;
   private hasMore = true;
 
   constructor() {
-    addIcons({ star, 'star-outline': starOutline });
+    addIcons({ star, 'star-outline': starOutline, search });
   }
 
   ngOnInit(): void {
@@ -74,6 +101,20 @@ export class PokemonListPage implements OnInit {
         event.target.disabled = true;
       }
     });
+  }
+
+  toggleSearch(): void {
+    this.showSearch.update((value) => !value);
+    if (!this.showSearch()) {
+      this.searchTerm.set('');
+      this.searchTerm$.next('');
+    }
+  }
+
+  onSearchInput(event: SearchbarCustomEvent): void {
+    const term = event.detail.value ?? '';
+    this.searchTerm.set(term);
+    this.searchTerm$.next(term);
   }
 
   isFavorite(id: number): boolean {
