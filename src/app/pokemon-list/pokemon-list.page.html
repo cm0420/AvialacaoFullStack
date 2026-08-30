@@ -46,30 +46,36 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="pk-grid">
-    @for (pokemon of displayedPokemons(); track pokemon.id) {
-      <div class="pk-card" [style.--card-glow]="glowFor(pokemon)" (click)="openDetail(pokemon.id)">
-        <span class="pk-card-number pk-mono">#{{ formatNumber(pokemon.id) }}</span>
-        <button
-          class="pk-card-star"
-          (click)="toggleFavorite(pokemon.id, $event)"
-          [class.active]="isFavorite(pokemon.id)"
-          [attr.aria-label]="isFavorite(pokemon.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
-        >
-          <ion-icon [name]="isFavorite(pokemon.id) ? 'star' : 'star-outline'"></ion-icon>
-        </button>
-        <img [src]="pokemon.imageUrl" [alt]="pokemon.name" loading="lazy" />
-        <span class="pk-card-name">{{ pokemon.name }}</span>
-        <div class="pk-card-types">
-          @for (t of pokemon.types; track $index) {
-            <span class="pk-mono pk-type-tag" [style.color]="chipAccent(t)">{{ typeLabel(t) }}</span>
-          }
+  @if (!isBusy()) {
+    <div class="pk-grid">
+      @for (pokemon of displayedPokemons(); track pokemon.id) {
+        <div class="pk-card" [style.--card-glow]="glowFor(pokemon)" (click)="openDetail(pokemon.id)">
+          <span class="pk-card-number pk-mono">#{{ formatNumber(pokemon.id) }}</span>
+          <button
+            class="pk-card-star"
+            (click)="toggleFavorite(pokemon.id, $event)"
+            [class.active]="isFavorite(pokemon.id)"
+            [attr.aria-label]="isFavorite(pokemon.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+          >
+            <ion-icon [name]="isFavorite(pokemon.id) ? 'star' : 'star-outline'"></ion-icon>
+          </button>
+          <img [src]="pokemon.imageUrl" [alt]="pokemon.name" loading="lazy" />
+          <span class="pk-card-name">{{ pokemon.name }}</span>
+          <div class="pk-card-types">
+            @for (t of pokemon.types; track $index) {
+              <span class="pk-mono pk-type-tag" [style.color]="chipAccent(t)">{{ typeLabel(t) }}</span>
+            }
+          </div>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  }
 
-  @if ((isSearching() || isFiltering()) && displayedPokemons().length === 0) {
+  @if (isBusy()) {
+    <div class="pk-loading">
+      <ion-spinner></ion-spinner>
+    </div>
+  } @else if ((isSearching() || isFiltering()) && displayedPokemons().length === 0) {
     <p class="empty-state">Nenhum Pokémon encontrado.</p>
   }
 

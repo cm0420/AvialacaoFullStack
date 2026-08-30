@@ -206,6 +206,19 @@
   text-transform: uppercase;
 }
 
+.pk-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20vh;
+
+  ion-spinner {
+    --color: var(--pk-red);
+    width: 32px;
+    height: 32px;
+  }
+}
+
 .empty-state {
   text-align: center;
   color: var(--pk-text-muted);
