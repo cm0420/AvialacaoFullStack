@@ -1,62 +1,82 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <div class="pk-detail-topbar">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/pokemons"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/pokemons" text="" icon="chevron-back"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ full()?.detail?.name }}</ion-title>
+    <span class="pk-mono pk-ficha">FICHA {{ formatNumber(full()?.detail?.id ?? 0) }}</span>
     <ion-buttons slot="end">
       <ion-button
         (click)="toggleFavorite()"
         [attr.aria-label]="isFavorite() ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
       >
-        <ion-icon slot="icon-only" [name]="isFavorite() ? 'star' : 'star-outline'"></ion-icon>
+        <ion-icon
+          slot="icon-only"
+          [name]="isFavorite() ? 'star' : 'star-outline'"
+          [class.active]="isFavorite()"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   @if (full(); as data) {
-    <div class="detail-layout">
-      <div class="detail-image">
-        <div class="pokemon-image-wrap">
+    <div class="pk-detail-layout">
+      <div class="pk-detail-hero" [style.background]="headerGradient(data.detail)">
+        <div class="pk-detail-aura" [style.--aura-glow]="auraGlow(data.detail)">
           <img [src]="artworkUrl(data.detail)" [alt]="data.detail.name" />
         </div>
-        <h1 class="pokemon-name">{{ data.detail.name }}</h1>
-        <span class="pokemon-number">#{{ data.detail.id }}</span>
+        <h1 class="pk-detail-name">{{ data.detail.name }}</h1>
+        <div class="pk-detail-badges">
+          @for (t of typesList(data.detail); track t) {
+            <span class="pk-badge" [style.background]="typeAccent(t) + '33'" [style.color]="typeAccent(t)">
+              {{ typeLabel(t) }}
+            </span>
+          }
+        </div>
       </div>
 
-      <div class="detail-info">
+      <div class="pk-detail-body">
         <p class="flavor-text">{{ flavorText(data.species) }}</p>
 
-        <ion-list [inset]="true">
-          <ion-item>
-            <ion-label>Altura</ion-label>
-            <ion-note slot="end">{{ data.detail.height / 10 }} m</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label>Peso</ion-label>
-            <ion-note slot="end">{{ data.detail.weight / 10 }} kg</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label>Exp. base</ion-label>
-            <ion-note slot="end">{{ data.detail.base_experience }}</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label>Tipos</ion-label>
-            <ion-note slot="end">{{ typesLabel(data.detail) }}</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label>Habilidades</ion-label>
-            <ion-note slot="end">{{ abilitiesLabel(data.detail) }}</ion-note>
-          </ion-item>
+        <div class="pk-tiles">
+          <div class="pk-tile">
+            <span class="pk-mono pk-tile-label">ALTURA</span>
+            <span class="pk-tile-value">{{ data.detail.height / 10 }} m</span>
+          </div>
+          <div class="pk-tile">
+            <span class="pk-mono pk-tile-label">PESO</span>
+            <span class="pk-tile-value">{{ data.detail.weight / 10 }} kg</span>
+          </div>
+          <div class="pk-tile">
+            <span class="pk-mono pk-tile-label">EXP.</span>
+            <span class="pk-tile-value">{{ data.detail.base_experience }}</span>
+          </div>
+        </div>
+
+        <div class="pk-section-header">
+          <h2 class="pk-mono pk-section-title">ESTATÍSTICAS</h2>
+          <span class="pk-mono pk-stats-total">Total {{ totalStats(data.detail) }}</span>
+        </div>
+
+        <div class="pk-stats">
           @for (stat of data.detail.stats; track stat.stat.name) {
-            <ion-item>
-              <ion-label>{{ statLabel(stat.stat.name) }}</ion-label>
-              <ion-note slot="end">{{ stat.base_stat }}</ion-note>
-            </ion-item>
+            <div class="pk-stat-row">
+              <span class="pk-stat-label">{{ statLabel(stat.stat.name) }}</span>
+              <span class="pk-mono pk-stat-value">{{ stat.base_stat }}</span>
+              <div class="pk-stat-bar">
+                <div class="pk-stat-bar-fill" [style.width.%]="statPercent(stat.base_stat)"></div>
+              </div>
+            </div>
           }
-        </ion-list>
+        </div>
+
+        <h2 class="pk-mono pk-section-title">HABILIDADES</h2>
+        <div class="pk-ability-chips">
+          @for (ability of abilitiesList(data.detail); track ability) {
+            <span class="pk-ability-chip">{{ ability }}</span>
+          }
+        </div>
       </div>
     </div>
   } @else {
