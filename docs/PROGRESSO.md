@@ -12,4 +12,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 5 | `FavoritesService` (estado reativo + `localStorage`) | [#5](https://github.com/cm0420/AvialacaoFullStack/pull/5) |
 | 6 | Tela Pokémons: grid + infinite scroll (renomeada de `tab1`) | [#6](https://github.com/cm0420/AvialacaoFullStack/pull/6) |
 | 7 | Favoritar direto na lista (estrela no card) | [#7](https://github.com/cm0420/AvialacaoFullStack/pull/7) |
-| 8 | Busca por nome na lista (searchbar + cache local) | _em andamento_ |
+| 8 | Busca por nome na lista (searchbar + cache local) | [#8](https://github.com/cm0420/AvialacaoFullStack/pull/8) |
+| 9 | Cabeçalho temático estilo Pokédex | _em andamento_ |
