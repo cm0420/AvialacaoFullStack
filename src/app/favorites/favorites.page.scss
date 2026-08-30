@@ -1,3 +1,33 @@
+ion-col.pokemon-col {
+  flex: 0 0 50%;
+  width: 50%;
+  max-width: 50%;
+}
+
+@media (min-width: 768px) {
+  ion-col.pokemon-col {
+    flex-basis: 33.33%;
+    width: 33.33%;
+    max-width: 33.33%;
+  }
+}
+
+@media (min-width: 1024px) {
+  ion-col.pokemon-col {
+    flex-basis: 25%;
+    width: 25%;
+    max-width: 25%;
+  }
+}
+
+@media (orientation: landscape) {
+  ion-col.pokemon-col {
+    flex-basis: 25%;
+    width: 25%;
+    max-width: 25%;
+  }
+}
+
 .pokemon-card {
   text-align: center;
   margin: 4px;

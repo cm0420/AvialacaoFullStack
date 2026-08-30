@@ -31,7 +31,7 @@
   <ion-grid>
     <ion-row>
       @for (pokemon of displayedPokemons(); track pokemon.id) {
-        <ion-col size="6" size-md="4" size-lg="3">
+        <ion-col class="pokemon-col">
           <ion-card class="pokemon-card" (click)="openDetail(pokemon.id)" [button]="true">
             <button
               class="favorite-button"
