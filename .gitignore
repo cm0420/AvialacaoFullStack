@@ -68,3 +68,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Notas internas de planejamento (não fazem parte do entregável)
+/plano-pokedex-app.md
