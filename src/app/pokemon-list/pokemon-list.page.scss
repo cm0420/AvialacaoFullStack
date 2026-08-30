@@ -1,3 +1,81 @@
+.pokedex-shell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(180deg, #ee1515 0%, #cc0000 100%);
+  border-bottom: 3px solid #7a0000;
+}
+
+.pokedex-lens {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: radial-gradient(circle at 35% 30%, #7fd7ff, #1a73e8 60%, #0b3d91);
+  animation: pokedex-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pokedex-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 2px rgba(56, 167, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 14px 6px rgba(56, 167, 255, 0.95);
+  }
+}
+
+.pokedex-title {
+  flex: 1;
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: #fff;
+  text-shadow: 1px 1px 0 #7a0000;
+}
+
+.pokedex-leds {
+  display: flex;
+  gap: 6px;
+}
+
+.led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.led-red {
+  background: #ff5a5a;
+}
+
+.led-yellow {
+  background: #ffd23f;
+}
+
+.led-green {
+  background: #5cd85c;
+}
+
+@media (orientation: landscape) {
+  .pokedex-shell {
+    padding: 6px 16px;
+  }
+
+  .pokedex-lens {
+    width: 18px;
+    height: 18px;
+  }
+
+  .pokedex-title {
+    font-size: 0.65rem;
+  }
+}
+
 .pokemon-card {
   position: relative;
   text-align: center;
