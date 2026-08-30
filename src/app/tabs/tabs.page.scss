@@ -1,9 +1,9 @@
 ion-tab-bar {
-  --background: #cc0000;
+  --background: var(--pk-surface);
   --border: 0;
-  --color: rgba(255, 255, 255, 0.7);
-  --color-selected: #ffcb05;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.25);
+  --color: var(--pk-text-faint);
+  --color-selected: var(--pk-red);
+  border-top: 1px solid var(--pk-divider);
 }
 
 ion-tab-button {

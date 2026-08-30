@@ -1,21 +1,12 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import {
   IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonButton,
-  IonSearchbar,
   IonContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonCard,
-  IonCardContent,
+  IonSearchbar,
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
@@ -26,7 +17,8 @@ import { addIcons } from 'ionicons';
 import { star, starOutline, search } from 'ionicons/icons';
 import { PokeApiService } from '../core/services/pokeapi.service';
 import { FavoritesService } from '../core/services/favorites.service';
-import { PokemonCard } from '../core/models/pokemon.model';
+import { PokemonCard, NamedApiResource } from '../core/models/pokemon.model';
+import { getTypeStyle, POKEMON_TYPE_STYLES } from '../core/constants/pokemon-type-colors';
 
 const PAGE_SIZE = 20;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -37,17 +29,8 @@ const SEARCH_DEBOUNCE_MS = 300;
   styleUrls: ['pokemon-list.page.scss'],
   imports: [
     IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
-    IonButton,
-    IonSearchbar,
     IonContent,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonCard,
-    IonCardContent,
+    IonSearchbar,
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
@@ -59,11 +42,15 @@ export class PokemonListPage implements OnInit {
   private router = inject(Router);
 
   pokemons = signal<PokemonCard[]>([]);
+  totalCount = signal<number | null>(null);
+
   favoriteIds = toSignal(this.favoritesService.favorites$, {
     initialValue: this.favoritesService.getAll(),
   });
 
-  showSearch = signal(false);
+  typeChips = toSignal(this.pokeApiService.getAllTypes(), { initialValue: [] as NamedApiResource[] });
+  knownTypeChips = computed(() => this.typeChips().filter((t) => t.name in POKEMON_TYPE_STYLES));
+
   searchTerm = signal('');
   private searchTerm$ = new Subject<string>();
   searchResults = toSignal(
@@ -75,10 +62,22 @@ export class PokemonListPage implements OnInit {
     { initialValue: [] as PokemonCard[] }
   );
 
-  isSearching = computed(() => this.searchTerm().trim().length > 0);
-  displayedPokemons = computed(() =>
-    this.isSearching() ? this.searchResults() : this.pokemons()
+  selectedType = signal<string | null>(null);
+  private selectedType$ = new Subject<string | null>();
+  typeFilterResults = toSignal(
+    this.selectedType$.pipe(
+      switchMap((type) => (type ? this.pokeApiService.getPokemonsByType(type) : of([])))
+    ),
+    { initialValue: [] as PokemonCard[] }
   );
+
+  isSearching = computed(() => this.searchTerm().trim().length > 0);
+  isFiltering = computed(() => this.selectedType() !== null);
+  displayedPokemons = computed(() => {
+    if (this.isSearching()) return this.searchResults();
+    if (this.isFiltering()) return this.typeFilterResults();
+    return this.pokemons();
+  });
 
   private offset = 0;
   private hasMore = true;
@@ -102,13 +101,9 @@ export class PokemonListPage implements OnInit {
         event.target.disabled = true;
       }
     });
-  }
 
-  toggleSearch(): void {
-    this.showSearch.update((value) => !value);
-    if (!this.showSearch()) {
-      this.searchTerm.set('');
-      this.searchTerm$.next('');
+    if (this.totalCount() === null) {
+      this.pokeApiService.getPokemonList(0, 1).subscribe((res) => this.totalCount.set(res.count));
     }
   }
 
@@ -116,6 +111,11 @@ export class PokemonListPage implements OnInit {
     const term = event.detail.value ?? '';
     this.searchTerm.set(term);
     this.searchTerm$.next(term);
+  }
+
+  selectType(typeName: string | null): void {
+    this.selectedType.set(typeName);
+    this.selectedType$.next(typeName);
   }
 
   isFavorite(id: number): boolean {
@@ -129,5 +129,21 @@ export class PokemonListPage implements OnInit {
 
   openDetail(id: number): void {
     this.router.navigate(['/pokemons', id]);
+  }
+
+  formatNumber(id: number): string {
+    return String(id).padStart(3, '0');
+  }
+
+  typeLabel(typeName: string): string {
+    return getTypeStyle(typeName).label;
+  }
+
+  glowFor(pokemon: PokemonCard): string {
+    return getTypeStyle(pokemon.types[0] ?? '').glow;
+  }
+
+  chipAccent(typeName: string): string {
+    return getTypeStyle(typeName).accent;
   }
 }
