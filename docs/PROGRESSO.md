@@ -14,4 +14,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 7 | Favoritar direto na lista (estrela no card) | [#7](https://github.com/cm0420/AvialacaoFullStack/pull/7) |
 | 8 | Busca por nome na lista (searchbar + cache local) | [#8](https://github.com/cm0420/AvialacaoFullStack/pull/8) |
 | 9 | Cabeçalho temático estilo Pokédex | [#9](https://github.com/cm0420/AvialacaoFullStack/pull/9) |
-| 10 | Tela de detalhes (`pokemon-detail`) | _em andamento_ |
+| 10 | Tela de detalhes (`pokemon-detail`) | [#10](https://github.com/cm0420/AvialacaoFullStack/pull/10) |
+| 11 | Tela de Favoritos (renomeada de `tab2`) | _em andamento_ |
