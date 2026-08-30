@@ -92,11 +92,10 @@ export class PokemonListPage implements OnInit {
   }
 
   loadMore(event?: InfiniteScrollCustomEvent): void {
-    this.pokeApiService.getPokemonList(this.offset, PAGE_SIZE).subscribe((response) => {
-      const cards = response.results.map((item) => this.pokeApiService.toCard(item));
-      this.pokemons.update((current) => [...current, ...cards]);
+    this.pokeApiService.getPokemonListWithTypes(this.offset, PAGE_SIZE).subscribe((page) => {
+      this.pokemons.update((current) => [...current, ...page.cards]);
       this.offset += PAGE_SIZE;
-      this.hasMore = !!response.next;
+      this.hasMore = !!page.next;
 
       event?.target.complete();
       if (event && !this.hasMore) {

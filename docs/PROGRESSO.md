@@ -20,4 +20,6 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 13 | Responsividade / orientação (grid + detail) | [#13](https://github.com/cm0420/AvialacaoFullStack/pull/13) |
 | 14 | Testes unitários (PokeApiService, FavoritesService, WebhookService) | [#14](https://github.com/cm0420/AvialacaoFullStack/pull/14) |
 | 15 | Reestilização visual (paleta Pokédex em todo o app) | [#15](https://github.com/cm0420/AvialacaoFullStack/pull/15) |
-| 16 | README com dissertação | _em andamento_ |
+| 16 | README com dissertação | [#16](https://github.com/cm0420/AvialacaoFullStack/pull/16) |
+| 17 | Design tokens do redesign (cores, fontes, mapa por tipo) | [#17](https://github.com/cm0420/AvialacaoFullStack/pull/17) |
+| 18 | Models + PokeApiService com suporte a tipo (listagem enriquecida, filtro por tipo) | _em andamento_ |

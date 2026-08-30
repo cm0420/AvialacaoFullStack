@@ -19,6 +19,7 @@ export interface PokemonCard {
   id: number;
   name: string;
   imageUrl: string;
+  types: string[];
 }
 
 export interface PokemonSprites {
@@ -74,4 +75,8 @@ export interface PokemonSpecies {
 export interface PokemonFull {
   detail: PokemonDetail;
   species: PokemonSpecies;
+}
+
+export interface PokemonTypeListResponse {
+  pokemon: { pokemon: PokemonListItem; slot: number }[];
 }
