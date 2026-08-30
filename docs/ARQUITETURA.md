@@ -46,6 +46,11 @@ Todos injetáveis via `providedIn: 'root'`, usando `inject()`.
   requisição HTTP extra por item.
 - **Responsividade**: layout se adapta via media queries de orientação (retrato/paisagem), tanto na
   listagem quanto nos detalhes.
+- **Webhook (demonstração)**: o POST pro webhook.site é enviado com `Content-Type: text/plain`
+  (corpo ainda é JSON) pra evitar o preflight de CORS, já que o serviço não devolve
+  `Access-Control-Allow-Origin`. O navegador bloqueia a leitura da resposta pelo JS (aparece como
+  erro de CORS no console), mas a requisição chega normalmente no destino — suficiente pra uma
+  notificação fire-and-forget que nunca deve travar o favoritar local.
 
 ## Histórico de decisões
 
