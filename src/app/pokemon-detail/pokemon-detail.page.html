@@ -28,7 +28,7 @@
         </div>
         <h1 class="pk-detail-name">{{ data.detail.name }}</h1>
         <div class="pk-detail-badges">
-          @for (t of typesList(data.detail); track t) {
+          @for (t of typesList(data.detail); track $index) {
             <span class="pk-badge" [style.background]="typeAccent(t) + '33'" [style.color]="typeAccent(t)">
               {{ typeLabel(t) }}
             </span>
@@ -73,7 +73,7 @@
 
         <h2 class="pk-mono pk-section-title">HABILIDADES</h2>
         <div class="pk-ability-chips">
-          @for (ability of abilitiesList(data.detail); track ability) {
+          @for (ability of abilitiesList(data.detail); track $index) {
             <span class="pk-ability-chip">{{ ability }}</span>
           }
         </div>

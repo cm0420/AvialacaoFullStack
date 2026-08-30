@@ -28,7 +28,7 @@
               <span class="pk-mono pk-row-number">#{{ formatNumber(pokemon.id) }}</span>
             </span>
             <span class="pk-row-types pk-mono">
-              @for (t of typesList(pokemon); track t) {
+              @for (t of typesList(pokemon); track $index) {
                 <span [style.color]="typeAccent(t)">{{ typeLabel(t) }}</span>
               }
             </span>
