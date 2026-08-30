@@ -16,4 +16,5 @@ Ver [ARQUITETURA.md](./ARQUITETURA.md) pra visão geral da estrutura.
 | 9 | Cabeçalho temático estilo Pokédex | [#9](https://github.com/cm0420/AvialacaoFullStack/pull/9) |
 | 10 | Tela de detalhes (`pokemon-detail`) | [#10](https://github.com/cm0420/AvialacaoFullStack/pull/10) |
 | 11 | Tela de Favoritos (renomeada de `tab2`) | [#11](https://github.com/cm0420/AvialacaoFullStack/pull/11) |
-| 12 | `WebhookService` + integração no favoritar | _em andamento_ |
+| 12 | `WebhookService` + integração no favoritar | [#12](https://github.com/cm0420/AvialacaoFullStack/pull/12) |
+| 13 | Responsividade / orientação (grid + detail) | _em andamento_ |
